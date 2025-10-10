@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+src/gmail_chat/__init__.py
+src/gmail_chat/config.py
+src/gmail_chat/gmail_client.py
+src/gmail_chat/ingestion.py
+src/gmail_chat/vector_store.py
+src/gmail_chat.egg-info/PKG-INFO
+src/gmail_chat.egg-info/SOURCES.txt
+src/gmail_chat.egg-info/dependency_links.txt
+src/gmail_chat.egg-info/requires.txt
+src/gmail_chat.egg-info/top_level.txt
