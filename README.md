@@ -1,10 +1,80 @@
+## Gmail Search Chatbot
+
+This directory contains the Python package, scripts, and tests for the Gmail search chatbot. It is managed with [uv](https://github.com/astral-sh/uv) using a `src/` layout.
+
+### Prerequisites
+
+- Python 3.11 (managed automatically by `uv`)
+- Google Cloud project with the Gmail API enabled
+- OAuth credentials providing a refresh token for the mailbox you plan to index
+- An embedding provider API key (OpenAI by default)
+
+### Getting Started
+
+1. **Install dependencies**
+
+   ```bash
+   uv sync
+   ```
+
+2. **Configure secrets**
+
+   Copy `.env.example` to `.env` and populate the required values:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Required variables:
+
+   - `GOOGLE_CLIENT_ID`
+   - `GOOGLE_CLIENT_SECRET`
+   - `GOOGLE_REFRESH_TOKEN`
+   - `OPENAI_API_KEY`
+   - `VECTOR_STORE_DIR` (defaults to `./var/chroma`)
+
+3. **Ingest your mailbox**
+
+   ```bash
+   uv run python scripts/ingest_mailbox.py --query "label:inbox" --limit 200
+   ```
+
+4. **Launch the Gradio interface**
+
+   ```bash
+   uv run python -m gmail_chat.app
+   ```
+
+### Project Structure
+
+```
+src/gmail_chat/
+├── __init__.py
+├── app.py
+├── chains.py
+├── config.py
+├── gmail_client.py
+├── ingestion.py
+└── vector_store.py
+scripts/
+└── ingest_mailbox.py
+tests/
+└── test_config.py
+```
+
+### Development Notes
+
+- The project uses a persistent ChromaDB collection stored under `VECTOR_STORE_DIR`.
+- Secrets are loaded via `python-dotenv` to keep them out of version control.
+- `tests/` contains initial pytest scaffolding; extend with mocks for higher coverage.
+
 # Gmail Chat Search App
 
 This project sketches a Gradio chat application that can search your Gmail inbox via a vector database, using the `uv` build tool and LangChain for retrieval orchestration.
 
 ---
 
-## 1. Environment Bootstrapping
+## 1. Environment Bootstrapping (Done)
 
 - **Initialize with `uv`**: `uv init gmail-chat` (or run inside the repo). This creates `pyproject.toml`, `uv.lock`, and a `src/` layout.
 - **Core dependencies**: add `langchain`, `gradio`, `chromadb` or `weaviate-client`, `google-api-python-client`, `google-auth`, `google-auth-oauthlib`, `python-dotenv`, and an embedding provider such as `sentence-transformers` or `openai`. Pin versions in `pyproject.toml`, then `uv sync`.
