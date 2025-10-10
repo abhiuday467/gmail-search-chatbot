@@ -74,7 +74,7 @@ This project sketches a Gradio chat application that can search your Gmail inbox
 
 ---
 
-## 1. Environment Bootstrapping
+## 1. Environment Bootstrapping (Done)
 
 - **Initialize with `uv`**: `uv init gmail-chat` (or run inside the repo). This creates `pyproject.toml`, `uv.lock`, and a `src/` layout.
 - **Core dependencies**: add `langchain`, `gradio`, `chromadb` or `weaviate-client`, `google-api-python-client`, `google-auth`, `google-auth-oauthlib`, `python-dotenv`, and an embedding provider such as `sentence-transformers` or `openai`. Pin versions in `pyproject.toml`, then `uv sync`.
