@@ -7,7 +7,7 @@ requires-python = ">=3.10"
 dependencies = [
   "langchain==0.2.11",
   "gradio==4.39.0",
-  "chromadb==0.5.5",
+  "weaviate-client==4.6.5",
   "google-api-python-client==2.124.0",
   "google-auth==2.35.0",
   "google-auth-oauthlib==1.2.0",

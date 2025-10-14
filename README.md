@@ -31,7 +31,10 @@ This directory contains the Python package, scripts, and tests for the Gmail sea
    - `GOOGLE_CLIENT_SECRET`
    - `GOOGLE_REFRESH_TOKEN`
    - `OPENAI_API_KEY`
-   - `VECTOR_STORE_DIR` (defaults to `./var/chroma`)
+   - `WEAVIATE_HOST` (defaults to `localhost`)
+   - `WEAVIATE_PORT` (defaults to `8080`)
+   - `WEAVIATE_GRPC_PORT` (defaults to `50051`)
+   - `WEAVIATE_API_KEY` (optional, if your instance requires authentication)
 
 3. **Ingest your mailbox**
 
@@ -64,7 +67,7 @@ tests/
 
 ### Development Notes
 
-- The project uses a persistent ChromaDB collection stored under `VECTOR_STORE_DIR`.
+- The project connects to a Weaviate instance (local by default) for vector storage.
 - Secrets are loaded via `python-dotenv` to keep them out of version control.
 - `tests/` contains initial pytest scaffolding; extend with mocks for higher coverage.
 
@@ -77,7 +80,7 @@ This project sketches a Gradio chat application that can search your Gmail inbox
 ## 1. Environment Bootstrapping (Done)
 
 - **Initialize with `uv`**: `uv init gmail-chat` (or run inside the repo). This creates `pyproject.toml`, `uv.lock`, and a `src/` layout.
-- **Core dependencies**: add `langchain`, `gradio`, `chromadb` or `weaviate-client`, `google-api-python-client`, `google-auth`, `google-auth-oauthlib`, `python-dotenv`, and an embedding provider such as `sentence-transformers` or `openai`. Pin versions in `pyproject.toml`, then `uv sync`.
+- **Core dependencies**: add `langchain`, `gradio`, `weaviate-client`, `google-api-python-client`, `google-auth`, `google-auth-oauthlib`, `python-dotenv`, and an embedding provider such as `sentence-transformers` or `openai`. Pin versions in `pyproject.toml`, then `uv sync`.
 - **Project layout**:
   ```
   gmail-chat/
@@ -114,9 +117,7 @@ This project sketches a Gradio chat application that can search your Gmail inbox
 
 - **Embedding selection**: pick a model supported by LangChain (e.g., `OpenAIEmbeddings`, `HuggingFaceEmbeddings`) based on latency, cost, and data policies.
 - **Batch processing**: chunk long emails using `RecursiveCharacterTextSplitter` (preserve headers, label as necessary), compute embeddings via the chosen model.
-- **Vector database**:
-  - **Chroma**: run a local persistent collection (`persist_directory="vector_store"`).
-  - **Weaviate**: configure remote endpoint, API key, schema with email fields.
+- **Vector database**: configure a Weaviate endpoint (local Docker Compose or managed instance), define a schema with email fields, and ensure authentication headers are set when required.
 - **Repository abstraction**: implement helper functions `init_store()`, `upsert_documents(documents)`, and `query_store(query, k)` to isolate Chroma vs. Weaviate differences.
 - **Ingestion script**: orchestrate Gmail fetch → document transformation → embedding → vector upsert; expose via `scripts/ingest_mailbox.py`.
 
