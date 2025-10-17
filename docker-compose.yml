@@ -1,0 +1,38 @@
+services:
+  weaviate:
+    image: semitechnologies/weaviate:1.26.3
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+      - "8000:8000" #Port to expose console
+    environment:
+      QUERY_DEFAULTS_LIMIT: 20
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
+      ENABLE_MODULES: "text2vec-transformers"
+      TRANSFORMERS_INFERENCE_API: "http://transformers:8080"
+      CLUSTER_HOSTNAME: "node1"
+      CONSOLE_ENABLED: "true" # The Console is enabled by default in recent versions
+      CONSOLE_PORT: "8000" # The Console port is 8000 by default
+    volumes:
+      - ./data/weaviate:/var/lib/weaviate
+    depends_on:
+      transformers:
+        condition: service_healthy
+
+  transformers:
+    image: semitechnologies/transformers-inference:sentence-transformers-multi-qa-MiniLM-L6-cos-v1
+    restart: unless-stopped
+    environment:
+      ENABLE_CUDA: "0"
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c 'import requests; requests.get(\"http://localhost:8080/.well-known/ready\").raise_for_status()'", "||", "exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s

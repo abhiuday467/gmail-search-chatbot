@@ -4,18 +4,10 @@ from __future__ import annotations
 
 import json  # present metadata in a readable format
 import sys  # exit codes and stderr output
-from pathlib import Path  # resolve project root when executed directly
 from typing import Optional  # type hints for optional metadata
 
 import weaviate  # client SDK for Weaviate operations
-
-try:
-    from database.config import load_weaviate_settings  # type: ignore  # reuse environment-based settings
-except ImportError:  # support running via `python src/database/health_check.py`
-    project_root = Path(__file__).resolve().parents[1]
-    if str(project_root) not in sys.path:
-        sys.path.append(str(project_root))
-    from database.config import load_weaviate_settings  # type: ignore
+from database.config import load_weaviate_settings
 
 
 def _format_meta(meta: Optional[dict]) -> str:

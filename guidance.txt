@@ -1,0 +1,55 @@
+Top-level docstring at file start summarises module purpose, followed by from __future__ import annotations (across src/database/config.py, src/gmail/gmail_email_service.py, tests).
+Imports grouped stdlib → third-party → internal, each block alphabetised; absolute imports preferred over relative after removing __init__.py packages.
+Type hints everywhere: functions/methods fully annotated, Optional[...] used explicitly, iterables typed (Iterable[GmailEmailRecord], Iterator[...]), @dataclass(frozen=True) for records.
+Runtime defaults managed via environment helpers (load_dotenv, _get_int raising ValueError); headers exposed as computed @property.
+Context managers used for resource handling (e.g., with weaviate.connect_to_local(...) inside service connect, health_check.main); close() respects ownership flags.
+Tests use pytest with fixtures (monkeypatch), organised into classes for behaviour slices, asserting both happy paths and error messaging.
+Serialization/deserialization encapsulated in model methods (to_properties, from_properties), using ISO timestamps and preserving booleans.
+Docstrings emphasise behaviour/intent, comments only where logic might surprise (e.g., why an exception is re-raised).
+Project-level config: pyproject.toml sets pythonpath for pytest, mypy_path, namespace package support, and ignores third-party type gaps via [[tool.mypy.overrides]].
+Commands run through uv run for env isolation (uv run pytest …, uv run mypy), matching repo tooling.
+Coding Guidance Profile (Python)
+================================
+
+Source Layout
+-------------
+- Modules start with a short docstring describing intent, then `from __future__ import annotations`.
+- Files under `src/` are namespace packages; always use absolute imports (e.g., `from database.config import ...`).
+- Group imports stdlib → third-party → internal, with blank lines between groups and names sorted alphabetically.
+
+Typing & Data Models
+--------------------
+- All public functions and methods include explicit type annotations; prefer concrete generics (`Iterable[GmailEmailRecord]`, `Iterator[...]`).
+- Use `typing.Optional` instead of implicit `None` defaults; expose computed values via typed `@property`.
+- Data containers adopt `@dataclass(frozen=True)` with helper methods such as `to_properties()` / `from_properties()` for (de)serialisation.
+
+Configuration & Environment
+---------------------------
+- Load environment variables via `dotenv` at module import; wrap integer parsing with `_get_int()` and raise `ValueError` on invalid values.
+- Provide a single `load_*_settings()` helper that returns an immutable dataclass and centralises header construction.
+
+Resource Management
+-------------------
+- Prefer context managers for external connections; when managing ownership, guard clean-up with explicit flags.
+- Avoid manual `__enter__`/`__exit__` calls on clients exposed as context managers—wrap them with `contextlib.contextmanager` helpers instead.
+
+Error Handling & Messaging
+--------------------------
+- Let unexpected exceptions bubble up unless there is clear recovery; when catching, rephrase messages to make misconfiguration obvious.
+- Keep inline comments sparse; reserve them for non-obvious behaviour or rationale.
+
+Testing Practices
+-----------------
+- Use `pytest` with descriptive test classes (e.g., `TestLoadWeaviateSettings`); rely on fixtures like `monkeypatch` for environment control.
+- Assert both success paths and failure messaging (e.g., invalid environment values raising a precise `ValueError`).
+
+Tooling & Commands
+------------------
+- Run tasks through `uv run` to stay inside the project environment (`uv run pytest`, `uv run mypy`).
+- `pyproject.toml` configures pytest (`pythonpath = ["src"]`), mypy (`mypy_path = "src"`, `namespace_packages = true`, `explicit_package_bases = true`), and ignores missing third-party stubs via `[[tool.mypy.overrides]]`.
+
+Style Summary
+-------------
+- Maintain readable docstrings and function summaries; avoid redundant comments.
+- Follow ISO formatting for date strings when serialising; ensure deserialisation mirrors serialisation helpers.
+- Keep new guidance consistent with these conventions unless a specific feature demands deviation.*** End Patch
