@@ -21,7 +21,7 @@ if TYPE_CHECKING:  # pragma: no cover - import only used for typing
 COLLECTION_NAME = "GmailEmail"
 
 
-class GmailEmailService:
+class GmailEmailRepository:
     """High-level helper for managing Gmail email records in Weaviate."""
 
     def __init__(self, client: "WeaviateClient", *, owns_client: bool = False):
@@ -33,7 +33,7 @@ class GmailEmailService:
     @contextmanager
     def connect(
         cls, settings: Optional[WeaviateSettings] = None
-    ) -> Iterator["GmailEmailService"]:
+    ) -> Iterator["GmailEmailRepository"]:
         """Context-managed helper that yields a service with an active client."""
         resolved = settings or load_weaviate_settings()
         with weaviate.connect_to_local(
@@ -44,7 +44,7 @@ class GmailEmailService:
         ) as client:
             yield cls(client)
 
-    def __enter__(self) -> "GmailEmailService":
+    def __enter__(self) -> "GmailEmailRepository":
         return self
 
     def __exit__(self, exc_type, exc, tb) -> None:
@@ -129,4 +129,4 @@ class GmailEmailService:
             self._owns_client = False
 
 
-__all__ = ["GmailEmailRecord", "GmailEmailService", "COLLECTION_NAME"]
+__all__ = ["EmailRecord", "GmailEmailRepository", "COLLECTION_NAME"]

@@ -35,3 +35,8 @@ explicit_package_bases = true
 [[tool.mypy.overrides]]
 module = ["weaviate", "weaviate.*"]
 ignore_missing_imports = true
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]

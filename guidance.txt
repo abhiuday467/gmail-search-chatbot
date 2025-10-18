@@ -42,7 +42,8 @@ Testing Practices
 -----------------
 - Use `pytest` with descriptive test classes (e.g., `TestLoadWeaviateSettings`); rely on fixtures like `monkeypatch` for environment control.
 - Assert both success paths and failure messaging (e.g., invalid environment values raising a precise `ValueError`).
-
+- Create test module in the same folder structure as the module under test inside the tests folder.
+- Create test modules that are mypy compatible.
 Tooling & Commands
 ------------------
 - Run tasks through `uv run` to stay inside the project environment (`uv run pytest`, `uv run mypy`).
