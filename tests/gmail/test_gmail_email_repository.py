@@ -73,7 +73,9 @@ def _install_weaviate_stubs() -> None:
     sys.modules["weaviate.exceptions"] = exceptions_module
 
     util_module = types.ModuleType("weaviate.util")
-    setattr(util_module, "generate_uuid5", lambda namespace, name: f"{namespace}:{name}")
+    setattr(
+        util_module, "generate_uuid5", lambda namespace, name: f"{namespace}:{name}"
+    )
     sys.modules["weaviate.util"] = util_module
 
     setattr(weaviate_module, "classes", classes_module)
@@ -92,7 +94,10 @@ def _install_weaviate_stubs() -> None:
 
 _install_weaviate_stubs()
 
-from gmail.gmail_email_repository import COLLECTION_NAME, GmailEmailRepository  # noqa: E402
+from gmail.gmail_email_repository import (
+    COLLECTION_NAME,
+    GmailEmailRepository,
+)  # noqa: E402
 import gmail.gmail_email_repository as service_module  # noqa: E402
 from gmail.models.email_record import EmailRecord  # noqa: E402
 

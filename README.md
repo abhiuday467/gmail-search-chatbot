@@ -51,18 +51,29 @@ This directory contains the Python package, scripts, and tests for the Gmail sea
 ### Project Structure
 
 ```
-src/gmail_chat/
-├── __init__.py
-├── app.py
-├── chains.py
-├── config.py
-├── gmail_client.py
-├── ingestion.py
-└── vector_store.py
+src/
+├── database/
+│   ├── config.py
+│   └── health_check.py
+├── gmail/
+│   ├── gmail_email_repository.py
+│   └── models/
+│       └── email_record.py
+└── gmail_chat/
+    ├── app.py
+    ├── chains.py
+    ├── config.py
+    ├── gmail_client.py
+    ├── ingestion.py
+    └── vector_store.py
 scripts/
 └── ingest_mailbox.py
 tests/
-└── test_config.py
+├── database/
+│   ├── test_config.py
+│   └── test_health_check.py
+└── gmail/
+    └── test_gmail_email_repository.py
 ```
 
 ### Development Notes
