@@ -1,2 +1,3 @@
 """App module placeholder."""
+
 pass

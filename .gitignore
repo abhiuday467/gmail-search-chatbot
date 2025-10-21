@@ -22,4 +22,5 @@ uv.lock
 .idea/
 .vscode/
 var/
+data/weaviate/
 gmail_chat.egg-info/
